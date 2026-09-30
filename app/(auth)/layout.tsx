@@ -1,7 +1,5 @@
-import type { ReactNode } from "react"
-
-import { AuthLayout } from "@/components/layout/auth-layout"
+import type { ReactNode } from "react";
 
 export default function AuthGroupLayout({ children }: { children: ReactNode }) {
-  return <AuthLayout>{children}</AuthLayout>
+  return <>{children}</>;
 }

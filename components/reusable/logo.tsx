@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { cn } from "@/lib/utils"
+import LogoIcon from "@/components/icons/AllIcons"
 
 function Logo({
   className,
@@ -19,14 +20,8 @@ function Logo({
         className
       )}
     >
-      <span
-        aria-hidden
-        data-slot="logo-mark"
-        className="grid size-8 place-items-center rounded-lg bg-primary text-sm font-bold text-primary-foreground"
-      >
-        B
-      </span>
-      {showText ? <span>Bytespace</span> : null}
+      <LogoIcon className="size-7 shrink-0" />
+      {showText ? <span>ByteSpace</span> : null}
     </Link>
   )
 }
