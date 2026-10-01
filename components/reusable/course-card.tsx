@@ -15,7 +15,7 @@ const tones: Record<string, string> = {
   violet: "bg-[#c7c5ff] text-[#26245a]",
 };
 
-export function CourseCard({ title, creator, category, price, tone = "mint", image }: { title: string; creator: string; category: string; price: string; tone?: string; image?: string }) {
+export function CourseCard({ title, creator, category, price, tone = "mint", image, level = "Beginner" }: { title: string; creator: string; category: string; price: string; tone?: string; image?: string; level?: string }) {
   return (
     <article className="overflow-hidden rounded-[18px] border border-[#e7e7eb] bg-white p-[10px] text-[#1f2024]">
       <div className={`relative aspect-[1.75] overflow-hidden rounded-xl ${tones[tone] ?? tones.mint}`}>
@@ -33,7 +33,7 @@ export function CourseCard({ title, creator, category, price, tone = "mint", ima
         </div>
         <p className="my-1 mb-[11px] text-[11px] text-[#777] max-md:mb-[7px] max-md:text-[9px]">by <Link className="text-blue-700" href="/creators">{creator}</Link></p>
         <div className="flex items-center gap-2 text-[10px] text-[#565965] max-md:gap-1 max-md:text-[8px]">
-          <span className="flex items-center gap-[5px] whitespace-nowrap rounded-full bg-[#f2f3f5] px-2.5 py-[7px] max-md:gap-1 max-md:px-[5px] max-md:py-1"><BarChart3 className="size-[14px] max-md:size-[10px]"/> Beginner</span>
+          <span className="flex items-center gap-[5px] whitespace-nowrap rounded-full bg-[#f2f3f5] px-2.5 py-[7px] max-md:gap-1 max-md:px-[5px] max-md:py-1"><BarChart3 className="size-[14px] max-md:size-[10px]"/> {level}</span>
           <div className="ml-auto flex items-center pl-2">
             {studentAvatars.map((avatar) => (
               <Image
