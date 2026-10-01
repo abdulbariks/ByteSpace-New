@@ -12,9 +12,8 @@ export function SearchBar({
       action="/courses"
       className="mx-auto flex w-full max-w-145 items-center gap-4 max-md:gap-2"
     >
-      <label
-        className="flex h-13 min-w-0 flex-1 items-center gap-3 rounded-full bg-white px-6 text-[#858995] 
-"
+<label
+        className="flex h-13 min-w-0 flex-1 items-center gap-3 rounded-full border border-[#CED0D3] bg-white px-6 text-[#858995]"
       >
         <Search size={19} aria-hidden="true" className="shrink-0" />
         <input

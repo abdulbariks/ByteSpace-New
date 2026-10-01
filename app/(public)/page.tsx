@@ -1,6 +1,5 @@
-import { CourseGrid } from "@/components/reusable/course-grid";
 import { HeroSection } from "@/components/home/HeroSection";
-import { Skills } from "@/components/home/Skills";
+import { ExploreSkills } from "@/components/home/ExploreSkills";
 import { DiverseLearning } from "@/components/home/DiverseLearning";
 import { ProfessionalGrowth } from "@/components/home/ProfessionalGrowth";
 import { PotentialCreator } from "@/components/home/PotentialCreator";
@@ -43,8 +42,7 @@ export default function HomePage() {
             arts, and make a difference in your career and life.
           </p>
         </div>
-        <Skills />
-        <CourseGrid />
+        <ExploreSkills />
       </section>
 
       <DiverseLearning />
