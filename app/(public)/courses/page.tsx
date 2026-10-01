@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/layout/Navbar";
+import { Courses } from "@/components/course/Courses";
 import { ChevronDown, Search } from "lucide-react";
 
 export default function CoursesPage() {
@@ -51,6 +52,7 @@ export default function CoursesPage() {
           </form>
         </div>
       </div>
+      <Courses />
     </main>
   );
 }
