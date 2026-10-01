@@ -9,6 +9,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "ByteSpace — Learn from creators",
+  description:
+    "Discover courses and learn new skills from independent creators at ByteSpace.",
 };
 
 export default function HomePage() {

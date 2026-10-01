@@ -112,8 +112,16 @@ const sortOptions = [
   { id: "price-high", label: "Price: high to low" },
 ];
 
-function toggleValue(value: string, current: string[], setter: (next: string[]) => void) {
-  setter(current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+function toggleValue(
+  value: string,
+  current: string[],
+  setter: (next: string[]) => void,
+) {
+  setter(
+    current.includes(value)
+      ? current.filter((item) => item !== value)
+      : [...current, value],
+  );
 }
 
 export function CreatorCourses() {
@@ -123,7 +131,10 @@ export function CreatorCourses() {
   const [sort, setSort] = useState("relevant");
 
   const hasFilters =
-    priceRange !== "all" || selectedLevels.length > 0 || selectedCategories.length > 0 || sort !== "relevant";
+    priceRange !== "all" ||
+    selectedLevels.length > 0 ||
+    selectedCategories.length > 0 ||
+    sort !== "relevant";
 
   const resetAll = () => {
     setPriceRange("all");
@@ -133,13 +144,17 @@ export function CreatorCourses() {
   };
 
   const visibleCourses = useMemo(() => {
-    const range = priceRanges.find((item) => item.id === priceRange) ?? priceRanges[0];
+    const range =
+      priceRanges.find((item) => item.id === priceRange) ?? priceRanges[0];
 
     const filtered = creatorCourses.filter((course) => {
-      const matchesPrice = course.priceValue >= range.min && course.priceValue <= range.max;
-      const matchesLevel = selectedLevels.length === 0 || selectedLevels.includes(course.level);
+      const matchesPrice =
+        course.priceValue >= range.min && course.priceValue <= range.max;
+      const matchesLevel =
+        selectedLevels.length === 0 || selectedLevels.includes(course.level);
       const matchesCategory =
-        selectedCategories.length === 0 || selectedCategories.includes(course.category);
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(course.category);
       return matchesPrice && matchesLevel && matchesCategory;
     });
 
@@ -156,7 +171,8 @@ export function CreatorCourses() {
     }
   }, [priceRange, selectedLevels, selectedCategories, sort]);
 
-  const sortLabel = sortOptions.find((option) => option.id === sort)?.label ?? "Most relevant";
+  const sortLabel =
+    sortOptions.find((option) => option.id === sort)?.label ?? "Most relevant";
 
   return (
     <section className="mx-auto w-[min(90%,1200px)] py-12 max-md:w-[92%] max-md:py-8">
@@ -203,7 +219,9 @@ export function CreatorCourses() {
                     key={level}
                     label={level}
                     checked={selectedLevels.includes(level)}
-                    onToggle={() => toggleValue(level, selectedLevels, setSelectedLevels)}
+                    onToggle={() =>
+                      toggleValue(level, selectedLevels, setSelectedLevels)
+                    }
                   />
                 ))}
               </div>
@@ -216,14 +234,21 @@ export function CreatorCourses() {
             badge={selectedCategories.length}
           >
             {() => (
-              <div role="menu" className="flex max-h-[280px] flex-col overflow-y-auto">
+              <div
+                role="menu"
+                className="flex max-h-[280px] flex-col overflow-y-auto"
+              >
                 {categories.map((category) => (
                   <DropdownCheckbox
                     key={category}
                     label={category}
                     checked={selectedCategories.includes(category)}
                     onToggle={() =>
-                      toggleValue(category, selectedCategories, setSelectedCategories)
+                      toggleValue(
+                        category,
+                        selectedCategories,
+                        setSelectedCategories,
+                      )
                     }
                   />
                 ))}
@@ -267,19 +292,22 @@ export function CreatorCourses() {
       </div>
 
       <p className="mb-6 text-sm text-[#6b6c74]" aria-live="polite">
-        {visibleCourses.length} {visibleCourses.length === 1 ? "course" : "courses"}
+        {visibleCourses.length}{" "}
+        {visibleCourses.length === 1 ? "course" : "courses"}
         {hasFilters ? " matching your filters" : ""}
       </p>
 
       {visibleCourses.length > 0 ? (
-        <div className="grid grid-cols-3 gap-10 max-lg:gap-6 max-md:grid-cols-2 max-sm:grid-cols-1 max-sm:gap-5">
+        <div className="grid grid-cols-1 gap-10 max-lg:gap-6 md:grid-cols-2 lg:grid-cols-3 max-sm:gap-5">
           {visibleCourses.map((course) => (
             <CourseCard key={course.title} {...course} />
           ))}
         </div>
       ) : (
         <div className="rounded-[18px] border border-dashed border-[#d7d8dd] bg-[#fafafb] px-6 py-20 text-center">
-          <p className="m-0 text-lg font-semibold text-[#25262b]">No courses found</p>
+          <p className="m-0 text-lg font-semibold text-[#25262b]">
+            No courses found
+          </p>
           <p className="mt-2 mb-5 text-sm text-[#6b6c74]">
             Try removing a filter or widening your price range.
           </p>

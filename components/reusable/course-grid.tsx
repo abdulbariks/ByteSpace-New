@@ -100,7 +100,7 @@ export function CourseGrid({ skill = "Featured" }: { skill?: string }) {
   );
 
   return (
-    <div className="grid grid-cols-3 gap-[22px] max-md:grid-cols-2 max-md:gap-3">
+    <div className="grid grid-cols-1 gap-[22px] md:grid-cols-2 lg:grid-cols-3 max-md:gap-3">
       {visibleCourses.map((course) => (
         <CourseCard key={course.title} {...course} />
       ))}

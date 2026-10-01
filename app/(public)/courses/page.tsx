@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "ByteSpace — Courses",
+  description:
+    "Search, filter, and sort through ByteSpace's full course library.",
 };
 
 export default async function CoursesPage({

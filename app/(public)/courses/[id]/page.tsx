@@ -16,6 +16,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "ByteSpace — Course details",
+  description:
+    "Explore course lessons, pricing, and creator details. Enroll to start learning.",
 };
 
 const lessons = [
