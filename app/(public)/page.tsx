@@ -5,6 +5,11 @@ import { ProfessionalGrowth } from "@/components/home/ProfessionalGrowth";
 import { PotentialCreator } from "@/components/home/PotentialCreator";
 import { OurCommunity } from "@/components/home/OurCommunity";
 import { LogoipsumOne, LogoipsumTwo } from "@/components/icons/AllIcons";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ByteSpace — Learn from creators",
+};
 
 export default function HomePage() {
   return (

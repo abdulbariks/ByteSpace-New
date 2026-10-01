@@ -1,6 +1,11 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Courses } from "@/components/course/Courses";
 import { ChevronDown, Search } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ByteSpace — Courses",
+};
 
 export default async function CoursesPage({
   searchParams,

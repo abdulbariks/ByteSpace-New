@@ -12,6 +12,11 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import CourseDescriptionDetails from "@/components/course/CourseDescriptionDetails";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ByteSpace — Course details",
+};
 
 const lessons = [
   ["01", "Introduction to Digital Assets", "12 mins"],

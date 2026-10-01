@@ -1,6 +1,11 @@
 import Image from "next/image";
 import { Navbar } from "@/components/layout/Navbar";
 import { CreatorCourses } from "@/components/creator/CreatorCourses";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ByteSpace — Creators",
+};
 
 export default function CreatorsPage() {
   return (
