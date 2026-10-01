@@ -1,16 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  BarChart3,
-  Check,
-  ChevronDown,
-  Filter,
-  Shapes,
-  SlidersHorizontal,
-  X,
-} from "lucide-react";
+import { useMemo, useState } from "react";
+import { BarChart3, Filter, Shapes, SlidersHorizontal, X } from "lucide-react";
 import { CourseCard } from "@/components/reusable/course-card";
+import {
+  DropdownCheckbox,
+  DropdownHeader,
+  DropdownRadio,
+  FilterDropdown,
+} from "@/components/reusable/filter-dropdown";
 
 type Course = {
   title: string;
@@ -114,113 +112,8 @@ const sortOptions = [
   { id: "price-high", label: "Price: high to low" },
 ];
 
-function Dropdown({
-  label,
-  icon,
-  badge,
-  children,
-  align = "left",
-}: {
-  label: string;
-  icon: React.ReactNode;
-  badge: number;
-  children: (close: () => void) => React.ReactNode;
-  align?: "left" | "right";
-}) {
-  const [open, setOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const onPointerDown = (event: MouseEvent) => {
-      if (!wrapperRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open]);
-
-  const active = badge > 0;
-
-  return (
-    <div ref={wrapperRef} className="relative">
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => setOpen((value) => !value)}
-        className={`inline-flex h-12 items-center gap-2 rounded-full border px-5 text-sm transition-colors max-sm:px-3 ${
-          active
-            ? "border-[#D4FB20] bg-[#D4FB20] text-[#222]"
-            : "border-[#e0e1e5] bg-white text-[#44464d] hover:border-[#c6c7cd]"
-        }`}
-      >
-        {icon}
-        {label}
-        {active ? (
-          <span className="grid size-5 place-items-center rounded-full bg-[#222] text-[10px] text-white">
-            {badge}
-          </span>
-        ) : (
-          <ChevronDown
-            size={16}
-            className={
-              open ? "rotate-180 transition-transform" : "transition-transform"
-            }
-          />
-        )}
-      </button>
-
-      {open && (
-        <div
-          className={`absolute top-[calc(100%+8px)] z-30 w-[248px] rounded-2xl border border-[#e0e1e5] bg-white p-2 text-[#25262b] shadow-[0_12px_30px_rgba(16,16,24,.12)] ${
-            align === "right" ? "right-0" : "left-0"
-          }`}
-        >
-          {children(() => setOpen(false))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function OptionRow({
-  label,
-  checked,
-  onToggle,
-}: {
-  label: string;
-  checked: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      role="menuitemcheckbox"
-      aria-checked={checked}
-      onClick={onToggle}
-      className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm text-[#44464d] transition-colors hover:bg-[#f3f3f5]"
-    >
-      <span
-        className={`grid size-[18px] shrink-0 place-items-center rounded-md border transition-colors ${
-          checked
-            ? "border-[#25262b] bg-[#25262b] text-white"
-            : "border-[#c9cad0] bg-white"
-        }`}
-      >
-        {checked && <Check size={13} strokeWidth={3} />}
-      </span>
-      {label}
-    </button>
-  );
+function toggleValue(value: string, current: string[], setter: (next: string[]) => void) {
+  setter(current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
 }
 
 export function CreatorCourses() {
@@ -229,23 +122,8 @@ export function CreatorCourses() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sort, setSort] = useState("relevant");
 
-  const toggle = (
-    value: string,
-    setter: (next: string[]) => void,
-    current: string[],
-  ) => {
-    setter(
-      current.includes(value)
-        ? current.filter((item) => item !== value)
-        : [...current, value],
-    );
-  };
-
   const hasFilters =
-    priceRange !== "all" ||
-    selectedLevels.length > 0 ||
-    selectedCategories.length > 0 ||
-    sort !== "relevant";
+    priceRange !== "all" || selectedLevels.length > 0 || selectedCategories.length > 0 || sort !== "relevant";
 
   const resetAll = () => {
     setPriceRange("all");
@@ -255,17 +133,13 @@ export function CreatorCourses() {
   };
 
   const visibleCourses = useMemo(() => {
-    const range =
-      priceRanges.find((item) => item.id === priceRange) ?? priceRanges[0];
+    const range = priceRanges.find((item) => item.id === priceRange) ?? priceRanges[0];
 
     const filtered = creatorCourses.filter((course) => {
-      const matchesPrice =
-        course.priceValue >= range.min && course.priceValue <= range.max;
-      const matchesLevel =
-        selectedLevels.length === 0 || selectedLevels.includes(course.level);
+      const matchesPrice = course.priceValue >= range.min && course.priceValue <= range.max;
+      const matchesLevel = selectedLevels.length === 0 || selectedLevels.includes(course.level);
       const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes(course.category);
+        selectedCategories.length === 0 || selectedCategories.includes(course.category);
       return matchesPrice && matchesLevel && matchesCategory;
     });
 
@@ -282,37 +156,27 @@ export function CreatorCourses() {
     }
   }, [priceRange, selectedLevels, selectedCategories, sort]);
 
-  const sortLabel =
-    sortOptions.find((option) => option.id === sort)?.label ?? "Most relevant";
+  const sortLabel = sortOptions.find((option) => option.id === sort)?.label ?? "Most relevant";
 
   return (
     <section className="mx-auto w-[min(90%,1200px)] py-12 max-md:w-[92%] max-md:py-8">
       <div className="mb-6 flex items-center justify-between gap-4 max-sm:mb-6 max-sm:flex-wrap">
         <div className="flex flex-wrap items-center gap-4 max-sm:gap-2">
-          <Dropdown
+          <FilterDropdown
             label="Filter"
             icon={<Filter size={18} />}
             badge={priceRange === "all" ? 0 : 1}
           >
             {() => (
               <div role="menu" className="flex flex-col">
-                <p className="px-3 pt-1.5 pb-2 text-xs font-semibold tracking-[.08em] text-[#8b8c93] uppercase">
-                  Price
-                </p>
+                <DropdownHeader>Price</DropdownHeader>
                 {priceRanges.map((range) => (
-                  <button
+                  <DropdownRadio
                     key={range.id}
-                    type="button"
-                    role="menuitemradio"
-                    aria-checked={priceRange === range.id}
-                    onClick={() => setPriceRange(range.id)}
-                    className="flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-sm text-[#44464d] transition-colors hover:bg-[#f3f3f5]"
-                  >
-                    {range.label}
-                    {priceRange === range.id && (
-                      <Check size={16} className="text-blue-700" />
-                    )}
-                  </button>
+                    label={range.label}
+                    checked={priceRange === range.id}
+                    onSelect={() => setPriceRange(range.id)}
+                  />
                 ))}
                 {priceRange !== "all" && (
                   <button
@@ -325,9 +189,9 @@ export function CreatorCourses() {
                 )}
               </div>
             )}
-          </Dropdown>
+          </FilterDropdown>
 
-          <Dropdown
+          <FilterDropdown
             label="Level"
             icon={<BarChart3 size={18} />}
             badge={selectedLevels.length}
@@ -335,46 +199,37 @@ export function CreatorCourses() {
             {() => (
               <div role="menu" className="flex flex-col">
                 {levels.map((level) => (
-                  <OptionRow
+                  <DropdownCheckbox
                     key={level}
                     label={level}
                     checked={selectedLevels.includes(level)}
-                    onToggle={() =>
-                      toggle(level, setSelectedLevels, selectedLevels)
-                    }
+                    onToggle={() => toggleValue(level, selectedLevels, setSelectedLevels)}
                   />
                 ))}
               </div>
             )}
-          </Dropdown>
+          </FilterDropdown>
 
-          <Dropdown
+          <FilterDropdown
             label="Category"
             icon={<Shapes size={18} />}
             badge={selectedCategories.length}
           >
             {() => (
-              <div
-                role="menu"
-                className="flex max-h-[280px] flex-col overflow-y-auto"
-              >
+              <div role="menu" className="flex max-h-[280px] flex-col overflow-y-auto">
                 {categories.map((category) => (
-                  <OptionRow
+                  <DropdownCheckbox
                     key={category}
                     label={category}
                     checked={selectedCategories.includes(category)}
                     onToggle={() =>
-                      toggle(
-                        category,
-                        setSelectedCategories,
-                        selectedCategories,
-                      )
+                      toggleValue(category, selectedCategories, setSelectedCategories)
                     }
                   />
                 ))}
               </div>
             )}
-          </Dropdown>
+          </FilterDropdown>
         </div>
 
         <div className="flex items-center gap-3 max-sm:w-full">
@@ -387,41 +242,32 @@ export function CreatorCourses() {
               <X size={16} /> Clear all
             </button>
           )}
-          <Dropdown
+          <FilterDropdown
             label={sortLabel}
             icon={<SlidersHorizontal size={18} />}
-            badge={0}
             align="right"
           >
             {(close) => (
               <div role="menu" className="flex flex-col">
                 {sortOptions.map((option) => (
-                  <button
+                  <DropdownRadio
                     key={option.id}
-                    type="button"
-                    role="menuitemradio"
-                    aria-checked={sort === option.id}
-                    onClick={() => {
+                    label={option.label}
+                    checked={sort === option.id}
+                    onSelect={() => {
                       setSort(option.id);
                       close();
                     }}
-                    className="flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-sm text-[#44464d] transition-colors hover:bg-[#f3f3f5]"
-                  >
-                    {option.label}
-                    {sort === option.id && (
-                      <Check size={16} className="text-blue-700" />
-                    )}
-                  </button>
+                  />
                 ))}
               </div>
             )}
-          </Dropdown>
+          </FilterDropdown>
         </div>
       </div>
 
       <p className="mb-6 text-sm text-[#6b6c74]" aria-live="polite">
-        {visibleCourses.length}{" "}
-        {visibleCourses.length === 1 ? "course" : "courses"}
+        {visibleCourses.length} {visibleCourses.length === 1 ? "course" : "courses"}
         {hasFilters ? " matching your filters" : ""}
       </p>
 
@@ -433,9 +279,7 @@ export function CreatorCourses() {
         </div>
       ) : (
         <div className="rounded-[18px] border border-dashed border-[#d7d8dd] bg-[#fafafb] px-6 py-20 text-center">
-          <p className="m-0 text-lg font-semibold text-[#25262b]">
-            No courses found
-          </p>
+          <p className="m-0 text-lg font-semibold text-[#25262b]">No courses found</p>
           <p className="mt-2 mb-5 text-sm text-[#6b6c74]">
             Try removing a filter or widening your price range.
           </p>
